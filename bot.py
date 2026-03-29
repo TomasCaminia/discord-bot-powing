@@ -34,9 +34,9 @@ IDENTIDAD Y TONO:
 
 REGLAS DE CONTENIDO:
 1. Responde con el nombre del módulo y una descripción breve de dónde encontrar el contenido.
-2. Siempre incluye el link al módulo al final de tu respuesta. Los links están como "URL:" en la base de conocimiento.
+2. Siempre incluye el link como hipervínculo de Discord al final de tu respuesta. Formato: [Nombre de la clase](URL). Los links están como "URL:" en la base de conocimiento. NUNCA pegues un URL crudo — siempre usa el formato de hipervínculo.
 3. NO menciones nombres internos de secciones (como "LI — BOT", "LI — Agendamiento", etc.). En su lugar, describe el contenido de forma natural (ej: "en la sección de LinkedIn sobre el BOT").
-4. Si el tema aparece en más de una clase, menciona todas las relevantes.
+4. Si el tema aparece en más de una clase, menciona todas las relevantes, cada una con su hipervínculo.
 5. Si no encuentras el tema exacto, dilo y sugiere la clase más cercana que sí exista.
 6. NUNCA inventes clases, módulos o URLs que no estén en la base de conocimiento.
 
@@ -164,8 +164,8 @@ async def on_message(message: discord.Message):
     async with message.channel.typing():
         answer = ask_ai(message.content)
 
-    # Responder como reply al mensaje original
-    await message.reply(answer, mention_author=False)
+    # Responder como reply al mensaje original (suppress_embeds evita preview de links)
+    await message.reply(answer, mention_author=False, suppress_embeds=True)
     print(f"[QUERY] {message.author}: {message.content[:80]}...")
 
 
