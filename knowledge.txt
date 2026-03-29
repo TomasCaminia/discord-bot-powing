@@ -1,0 +1,138 @@
+GRUPO POWING — CONTENIDO DEL CLASSROOM
+Portal: Camino a Convenciones
+
+El Classroom es la plataforma de formación de Grupo Powing donde los agentes de seguros acceden a cursos, clases en video y recursos para acelerar su camino a convenciones.
+
+URL del Classroom: https://app.grupopowing.com/classroom/
+
+================================================
+MÓDULO 1: BASES DEL AGENTE DIGITAL
+================================================
+Este módulo introductorio explica cómo funciona el programa, qué herramientas van a usar y cuál es el camino para llegar a convención.
+
+Sección "General":
+- Introducción (8:45 min):
+  Primera clase. Explica los próximos pasos y cómo arrancar en el programa.
+
+- Cómo Funciona el Programa (12:30 min):
+  Estructura completa del programa: módulos, herramientas, soporte y objetivos.
+
+- Tu Camino a Convención (15:10 min):
+  La hoja de ruta para calificar a convención. Metas, métricas y timeline.
+
+================================================
+MÓDULO 2: MÉTODO 3X
+================================================
+El corazón de la estrategia de prospección: conseguir referidos a cambio de recursos de valor generados con IA.
+
+Sección "General":
+- Qué es el Método 3X (14:20 min):
+  La estrategia central: referidos a cambio de recursos de valor.
+  Palabras clave: método, estrategia, referidos, recursos, prospección, 3X.
+
+- Cómo crear recursos de valor con IA (18:00 min):
+  Usa la IA para crear calculadoras, guías y checklists que tus prospectos necesitan.
+  Palabras clave: IA, inteligencia artificial, recursos, calculadora, guía, checklist, generador.
+
+- El guión de agendamiento (11:45 min):
+  Script para agendar reuniones de revisión por WhatsApp y llamada.
+  Palabras clave: guión, script, agendar, agendamiento, WhatsApp, llamada, reunión.
+
+- Presentación de referidos (9:30 min):
+  Cómo pedir referidos sin que se sienta forzado. Técnica natural y efectiva.
+  Palabras clave: referidos, pedir referidos, presentación, técnica.
+
+================================================
+MÓDULO 3: MÉTODO ACELERACIÓN
+================================================
+Herramientas tecnológicas para acelerar tu proceso: CRM, IA y grabación de reuniones.
+
+Sección "General":
+- Configuración del CRM (16:00 min):
+  Carga tu cartera y configura etapas de prospección en el CRM del portal.
+  Palabras clave: CRM, cartera, prospectos, configurar, etapas.
+
+- Herramientas IA de la app (13:20 min):
+  Generador de recursos, guión, calculadora y más. Todo dentro del portal.
+  Palabras clave: herramientas, IA, generador, app, portal, calculadora.
+
+- Instalación de Fathom (7:15 min):
+  Graba y analiza tus reuniones automáticamente con Fathom.
+  Palabras clave: Fathom, grabar, reuniones, análisis, grabación.
+
+================================================
+MÓDULO 4: SISTEMA DE CITAS CALIFICADAS
+================================================
+Cómo estructurar la reunión de revisión, contactar clientes y personalizar tu presentación.
+
+Sección "General":
+- La reunión de revisión (20:00 min):
+  Estructura de 25 min revisión + 10 min referidos. El formato ideal para cada cita.
+  Palabras clave: reunión, revisión, cita, estructura, formato.
+
+- Cómo contactar a tus clientes (12:10 min):
+  Scripts y estrategias para agendar con tu cartera actual.
+  Palabras clave: contactar, clientes, cartera, agendar, scripts.
+
+- Adaptando tu presentación (10:45 min):
+  Personaliza la presentación de referidos a tu estilo personal.
+  Palabras clave: presentación, personalizar, adaptar, estilo.
+
+================================================
+MÓDULO 5: PROCESO DE VENTAS
+================================================
+Todo el proceso comercial: desde la primera cita hasta el cierre y manejo de objeciones.
+
+Sección "General":
+- 1ra cita comercial: estructura (22:30 min):
+  Rapport, diagnóstico, presentación y cierre tentativo. La primera reunión de ventas.
+  Palabras clave: primera cita, cita comercial, rapport, diagnóstico, cierre, ventas.
+
+- 2da cita comercial: cierre (19:45 min):
+  Recapitular, propuesta, objeciones y cierre definitivo.
+  Palabras clave: segunda cita, cierre, propuesta, objeciones, cerrar.
+
+- Manejo de objeciones (16:20 min):
+  Las 10 objeciones más comunes y cómo responder a cada una.
+  Palabras clave: objeciones, responder, manejar, excusas, no me interesa, es caro, ya tengo.
+
+================================================
+MÓDULO 6: CONTENIDO EN REDES SOCIALES
+================================================
+Estrategia de contenido digital para posicionarte como referente en seguros.
+
+Sección "General":
+- Estrategia de contenido (14:00 min):
+  Qué publicar, cuándo y en qué plataformas. Plan de contenido para agentes.
+  Palabras clave: contenido, redes, estrategia, publicar, plan, redes sociales.
+
+- Creación de posts con IA (11:30 min):
+  Usa la IA para generar contenido de valor rápidamente. Posts, carruseles, historias.
+  Palabras clave: posts, IA, crear contenido, redes sociales, carruseles, historias.
+
+- LinkedIn para agentes de seguros (13:15 min):
+  Optimiza tu perfil y genera conexiones de calidad en LinkedIn.
+  Palabras clave: LinkedIn, perfil, conexiones, networking, profesional.
+
+================================================
+MÓDULO 7: SESIONES EN VIVO (Grabaciones)
+================================================
+Grabaciones de las sesiones en vivo con coaches. Se van agregando nuevas sesiones periódicamente.
+Palabras clave: sesiones, vivo, grabaciones, replay, coaching, en vivo.
+
+================================================
+HERRAMIENTAS DEL PORTAL
+================================================
+Además del Classroom, el portal tiene herramientas útiles:
+
+- CRM de Prospectos: Para gestionar tu cartera y pipeline de ventas.
+  URL: https://app.grupopowing.com/crm/
+
+- Generador de Recursos IA: Crea calculadoras, guías y recursos personalizados con IA.
+  URL: https://app.grupopowing.com/generador-recursos/
+
+- Herramientas IA: Suite de herramientas de inteligencia artificial para agentes.
+  URL: https://app.grupopowing.com/herramientas-ia/
+
+- Calendario: Agenda y organiza tus citas.
+  URL: https://app.grupopowing.com/calendario/
