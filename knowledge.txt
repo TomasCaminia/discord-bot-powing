@@ -1,11 +1,13 @@
 GRUPO POWING — CONTENIDO DEL CLASSROOM (Skool)
 Comunidad: IDA | Grupo Powing
-Plataforma: Skool (https://www.skool.com/grupo-powing)
+Plataforma: Skool
+URL del Classroom: https://www.skool.com/el-instituto-de-agentes-9794/classroom
 
 El Classroom es la plataforma de formación donde los agentes de seguros de Grupo Powing acceden a cursos, clases en video y recursos para acelerar su camino a convenciones.
 
 ================================================
 MÓDULO: BASES DEL AGENTE DIGITAL
+URL: https://www.skool.com/el-instituto-de-agentes-9794/classroom/9ca10d9e
 ================================================
 Módulo introductorio obligatorio. Semana 0 del programa.
 
@@ -16,6 +18,7 @@ Semana 0:
 
 ================================================
 MÓDULO: MÉTODO 3X
+URL: https://www.skool.com/el-instituto-de-agentes-9794/classroom/ddb26a3f
 ================================================
 La estrategia central de prospección y aceleración del programa.
 
@@ -36,6 +39,7 @@ Semana 2 — Aceleración:
 
 ================================================
 MÓDULO: ESTRUCTURA TÉCNICA
+URL: https://www.skool.com/el-instituto-de-agentes-9794/classroom/200f3d28
 ================================================
 Configuración técnica del sistema de citas y herramientas digitales.
 
@@ -46,6 +50,7 @@ Configuración técnica del sistema de citas y herramientas digitales.
 
 ================================================
 MÓDULO: SISTEMA DE CITAS CALIFICADAS
+URL: https://www.skool.com/el-instituto-de-agentes-9794/classroom/25ac10c1
 ================================================
 El sistema completo para agendar citas calificadas, centrado en LinkedIn.
 
@@ -87,6 +92,7 @@ Introducción:
 
 ================================================
 MÓDULO: PROCESO DE VENTAS
+URL: https://www.skool.com/el-instituto-de-agentes-9794/classroom/0e91d4ca
 ================================================
 Todo el proceso comercial: desde la primera cita hasta el cierre y manejo de objeciones.
 
@@ -132,6 +138,7 @@ Arsenal de Ventas:
 
 ================================================
 MÓDULO: CONTENIDO EN REDES SOCIALES
+URL: https://www.skool.com/el-instituto-de-agentes-9794/classroom/ae9155d6
 ================================================
 Estrategia de contenido digital para posicionarte como referente en seguros.
 
@@ -142,6 +149,19 @@ Estrategia de contenido digital para posicionarte como referente en seguros.
 - GPT de Guiones
 - Formatos de Contenido
 - Cómo grabarte con el celular sin una gran cámara
+
+================================================
+MÓDULO: SESIONES EN VIVO
+URL: https://www.skool.com/el-instituto-de-agentes-9794/classroom/3dc4a7b4
+================================================
+Grabaciones de las sesiones en vivo con coaches. Se van agregando nuevas sesiones periódicamente.
+Palabras clave: sesiones, vivo, grabaciones, replay, coaching, en vivo.
+
+================================================
+MÓDULO: NIVEL AVANZADO
+URL: https://www.skool.com/el-instituto-de-agentes-9794/classroom/de807cc8
+================================================
+Contenido avanzado para agentes que ya dominan los fundamentos.
 
 ================================================
 HERRAMIENTAS DEL PORTAL
