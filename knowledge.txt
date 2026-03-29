@@ -1,129 +1,152 @@
-GRUPO POWING — CONTENIDO DEL CLASSROOM
-Portal: Camino a Convenciones
+GRUPO POWING — CONTENIDO DEL CLASSROOM (Skool)
+Comunidad: IDA | Grupo Powing
+Plataforma: Skool (https://www.skool.com/grupo-powing)
 
-El Classroom es la plataforma de formación de Grupo Powing donde los agentes de seguros acceden a cursos, clases en video y recursos para acelerar su camino a convenciones.
-
-URL del Classroom: https://app.grupopowing.com/classroom/
-
-================================================
-MÓDULO 1: BASES DEL AGENTE DIGITAL
-================================================
-Este módulo introductorio explica cómo funciona el programa, qué herramientas van a usar y cuál es el camino para llegar a convención.
-
-Sección "General":
-- Introducción (8:45 min):
-  Primera clase. Explica los próximos pasos y cómo arrancar en el programa.
-
-- Cómo Funciona el Programa (12:30 min):
-  Estructura completa del programa: módulos, herramientas, soporte y objetivos.
-
-- Tu Camino a Convención (15:10 min):
-  La hoja de ruta para calificar a convención. Metas, métricas y timeline.
+El Classroom es la plataforma de formación donde los agentes de seguros de Grupo Powing acceden a cursos, clases en video y recursos para acelerar su camino a convenciones.
 
 ================================================
-MÓDULO 2: MÉTODO 3X
+MÓDULO: BASES DEL AGENTE DIGITAL
 ================================================
-El corazón de la estrategia de prospección: conseguir referidos a cambio de recursos de valor generados con IA.
+Módulo introductorio obligatorio. Semana 0 del programa.
 
-Sección "General":
-- Qué es el Método 3X (14:20 min):
-  La estrategia central: referidos a cambio de recursos de valor.
-  Palabras clave: método, estrategia, referidos, recursos, prospección, 3X.
-
-- Cómo crear recursos de valor con IA (18:00 min):
-  Usa la IA para crear calculadoras, guías y checklists que tus prospectos necesitan.
-  Palabras clave: IA, inteligencia artificial, recursos, calculadora, guía, checklist, generador.
-
-- El guión de agendamiento (11:45 min):
-  Script para agendar reuniones de revisión por WhatsApp y llamada.
-  Palabras clave: guión, script, agendar, agendamiento, WhatsApp, llamada, reunión.
-
-- Presentación de referidos (9:30 min):
-  Cómo pedir referidos sin que se sienta forzado. Técnica natural y efectiva.
-  Palabras clave: referidos, pedir referidos, presentación, técnica.
+Semana 0:
+1. Introducción (Obligatorio)
+2. Cómo Funciona el Programa
+3. Tu Camino a Convención
 
 ================================================
-MÓDULO 3: MÉTODO ACELERACIÓN
+MÓDULO: MÉTODO 3X
 ================================================
-Herramientas tecnológicas para acelerar tu proceso: CRM, IA y grabación de reuniones.
+La estrategia central de prospección y aceleración del programa.
 
-Sección "General":
-- Configuración del CRM (16:00 min):
-  Carga tu cartera y configura etapas de prospección en el CRM del portal.
-  Palabras clave: CRM, cartera, prospectos, configurar, etapas.
+Semana 1 — Pilares:
+1. Introducción
+2. Análisis de Solicitud (Real)
+3. Guía de Uso
+4. Creación de Recursos
+5. Creación de Presentación
+6. Instalación de Fathom
+7. Creación de Guión
 
-- Herramientas IA de la app (13:20 min):
-  Generador de recursos, guión, calculadora y más. Todo dentro del portal.
-  Palabras clave: herramientas, IA, generador, app, portal, calculadora.
-
-- Instalación de Fathom (7:15 min):
-  Graba y analiza tus reuniones automáticamente con Fathom.
-  Palabras clave: Fathom, grabar, reuniones, análisis, grabación.
-
-================================================
-MÓDULO 4: SISTEMA DE CITAS CALIFICADAS
-================================================
-Cómo estructurar la reunión de revisión, contactar clientes y personalizar tu presentación.
-
-Sección "General":
-- La reunión de revisión (20:00 min):
-  Estructura de 25 min revisión + 10 min referidos. El formato ideal para cada cita.
-  Palabras clave: reunión, revisión, cita, estructura, formato.
-
-- Cómo contactar a tus clientes (12:10 min):
-  Scripts y estrategias para agendar con tu cartera actual.
-  Palabras clave: contactar, clientes, cartera, agendar, scripts.
-
-- Adaptando tu presentación (10:45 min):
-  Personaliza la presentación de referidos a tu estilo personal.
-  Palabras clave: presentación, personalizar, adaptar, estilo.
+Semana 2 — Aceleración:
+1. Introducción
+2. La Reunión Paso a Paso
+3. Guión — Clientes
+4. Plan de Acción
 
 ================================================
-MÓDULO 5: PROCESO DE VENTAS
+MÓDULO: ESTRUCTURA TÉCNICA
+================================================
+Configuración técnica del sistema de citas y herramientas digitales.
+
+- Base Técnica del Sistema de Citas (video introductorio)
+- 1 — Gestión de Agenda: Fundamentos e Implementación
+- 2 — Formulario Previo: Fundamentos e Implementación
+- 3 — WhatsApp Empresarial: Fundamentos e Implementación
+
+================================================
+MÓDULO: SISTEMA DE CITAS CALIFICADAS
+================================================
+El sistema completo para agendar citas calificadas, centrado en LinkedIn.
+
+Introducción:
+- +20.000 Citas Agendadas (video introductorio)
+- Marco Introductorio
+- El Camino del Agendamiento
+
+1) LinkedIn — Introducción:
+- Arquitectura de Crecimiento
+- Bases de la Red Social
+- El Mapa de LinkedIn
+
+2) LI — Selección de nicho:
+- La Brújula de LinkedIn
+- Sales Navigator
+- Los Tres Indicadores
+- Implementación
+
+3) LI — Optimización de perfil:
+- Tu Perfil en Prospección
+- Implementación #1
+- Implementación #2
+
+4) LI — Agendamiento:
+- A — Marco del Agendamiento
+- B — Solicitud de Permiso
+- C — Propuesta de Reunión
+- D — Transición y Agendamiento
+- E — Creación de Guión Unificado
+- Implementación
+
+5) LI — BOT:
+- A — Su rol en el Sistema de Citas
+- B — Instalación
+- C — Armado de Mensajes: Conexión
+- D — Mensaje 1 y Seguimientos
+- E — Métricas
+
+================================================
+MÓDULO: PROCESO DE VENTAS
 ================================================
 Todo el proceso comercial: desde la primera cita hasta el cierre y manejo de objeciones.
 
-Sección "General":
-- 1ra cita comercial: estructura (22:30 min):
-  Rapport, diagnóstico, presentación y cierre tentativo. La primera reunión de ventas.
-  Palabras clave: primera cita, cita comercial, rapport, diagnóstico, cierre, ventas.
+Bases Fundamentales:
+- Quién soy
+- Cómo avanzar en los procesos
+- Estructura comercial
+- Eliminando malos hábitos
 
-- 2da cita comercial: cierre (19:45 min):
-  Recapitular, propuesta, objeciones y cierre definitivo.
-  Palabras clave: segunda cita, cierre, propuesta, objeciones, cerrar.
+Cita inicial:
+- La cita inicial
+- Apertura
+- Marco
+- La pregunta brújula
+- Recolección de información
+- Unidad de interés
+- Transición a cita de cierre
+- Implementación y guión
 
-- Manejo de objeciones (16:20 min):
-  Las 10 objeciones más comunes y cómo responder a cada una.
-  Palabras clave: objeciones, responder, manejar, excusas, no me interesa, es caro, ya tengo.
+Cita de cierre:
+- Entre Citas
+- Apertura del cierre
+- Presentación
+- Cierres de transición
+- Seguimiento a un "Si"
+
+Resolución de Objeciones:
+- ¿Cómo resolver objeciones?
+- Objeción #1: No prende su cámara
+- Objeción #2: No acepta el marco
+- Objeción #3: Necesita pensarlo
+- Objeción #4: Necesita consultarlo
+
+Arsenal de Ventas:
+- Análisis de citas
+- Locus de control
+- Obligaciones del Vendedor
+- La Raíz de la Mejora Continua
+- Aspectos Fundamentales de la Venta
+- Los 12 cierres de ventas de Alex Dey
+- Las 6 necesidades humanas
+- Hacer buenas preguntas
 
 ================================================
-MÓDULO 6: CONTENIDO EN REDES SOCIALES
+MÓDULO: CONTENIDO EN REDES SOCIALES
 ================================================
 Estrategia de contenido digital para posicionarte como referente en seguros.
 
-Sección "General":
-- Estrategia de contenido (14:00 min):
-  Qué publicar, cuándo y en qué plataformas. Plan de contenido para agentes.
-  Palabras clave: contenido, redes, estrategia, publicar, plan, redes sociales.
-
-- Creación de posts con IA (11:30 min):
-  Usa la IA para generar contenido de valor rápidamente. Posts, carruseles, historias.
-  Palabras clave: posts, IA, crear contenido, redes sociales, carruseles, historias.
-
-- LinkedIn para agentes de seguros (13:15 min):
-  Optimiza tu perfil y genera conexiones de calidad en LinkedIn.
-  Palabras clave: LinkedIn, perfil, conexiones, networking, profesional.
-
-================================================
-MÓDULO 7: SESIONES EN VIVO (Grabaciones)
-================================================
-Grabaciones de las sesiones en vivo con coaches. Se van agregando nuevas sesiones periódicamente.
-Palabras clave: sesiones, vivo, grabaciones, replay, coaching, en vivo.
+- Formato Video
+- La Economía de la Atención
+- Ideas de Contenido
+- Guionar videos que Capturen Atención y Conviertan
+- GPT de Guiones
+- Formatos de Contenido
+- Cómo grabarte con el celular sin una gran cámara
 
 ================================================
 HERRAMIENTAS DEL PORTAL
 ================================================
-Además del Classroom, el portal tiene herramientas útiles:
+Además del Classroom en Skool, los agentes tienen acceso a un portal web con herramientas:
 
 - CRM de Prospectos: Para gestionar tu cartera y pipeline de ventas.
   URL: https://app.grupopowing.com/crm/
@@ -133,6 +156,3 @@ Además del Classroom, el portal tiene herramientas útiles:
 
 - Herramientas IA: Suite de herramientas de inteligencia artificial para agentes.
   URL: https://app.grupopowing.com/herramientas-ia/
-
-- Calendario: Agenda y organiza tus citas.
-  URL: https://app.grupopowing.com/calendario/
