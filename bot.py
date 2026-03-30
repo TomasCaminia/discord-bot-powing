@@ -154,6 +154,10 @@ async def on_message(message: discord.Message):
     if message.author.bot:
         return
 
+    # No responder a admins — si un admin escribe, es porque ya está atendiendo
+    if message.author.guild_permissions.administrator:
+        return
+
     # Verificar si el canal está permitido
     if allowed_channel_ids and message.channel.id not in allowed_channel_ids:
         return
