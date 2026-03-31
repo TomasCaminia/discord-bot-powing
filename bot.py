@@ -8,7 +8,6 @@ import re
 import time
 import asyncio
 import hashlib
-import random
 import discord
 import anthropic
 from pathlib import Path
@@ -41,7 +40,7 @@ REGLAS:
    2. [Clase 2](URL2)
 4. Si no encuentras el tema, dilo y sugiere lo más cercano.
 5. NUNCA inventes clases o URLs.
-6. Si el mensaje NO es una pregunta sobre contenido del Classroom, responde SOLO: SKIP
+6. Si el mensaje NO es una pregunta clara sobre contenido del Classroom, responde SOLO: SKIP
 
 BASE DE CONOCIMIENTO:
 {KNOWLEDGE}"""
@@ -59,7 +58,7 @@ STRONG_KEYWORDS = [
     r"\bguión\b", r"\bguion\b",
 ]
 
-# WEAK = palabras que PODRÍAN indicar búsqueda, pero también aparecen en conversación normal
+# WEAK = podrían indicar búsqueda, pero también aparecen en conversación normal
 WEAK_KEYWORDS = [
     r"\bvideo\b", r"\bvideos\b",
     r"\bherramienta\b", r"\bherramientas\b",
@@ -87,7 +86,7 @@ QUESTION_PATTERNS = [
     r"\b(cómo|como) (instalo|configuro|hago|uso|activo|armo|creo)\b",
 ]
 
-# Frases que indican que el mensaje es SOBRE el bot o conversación casual
+# Frases que indican conversación casual, meta, o sobre el bot
 META_PATTERNS = [
     r"asistente de contenido",
     r"\bbot\b.{0,20}(ruido|molest|spam|error|problema|respond|desconect|crash)",
@@ -100,63 +99,36 @@ META_PATTERNS = [
     r"\b(pendientes|tareas|sprint|daily|standup)\b",
     r"\b(hablé|hable|hablamos|platicamos|llam[eé]|contacté)\b",
     r"\bte (escribo|mando|envío|contacto)\b",
-    r"\bbuenas? (noche|tarde|día|noches|tardes|días)\b.*\bcómo (estás|estas|están|van)\b",
-    r"(qué onda|que onda|qué tal|que tal)$",
     r"\b(felicidades|felicitaciones|bien hecho|excelente trabajo)\b",
     r"\b(reunión|reunion|junta|llamada) (de |del |con )(equipo|trabajo|lunes|martes|miércoles|jueves|viernes)\b",
 ]
-
-# Saludos simples — se manejan LOCAL sin gastar tokens
-GREETING_PATTERNS = [
-    r"^(hola|hey|buenos días|buenas tardes|buenas noches|buenas|qué onda|buen día)[\s!.]*$",
-    r"^(gracias|muchas gracias|te agradezco|mil gracias|thx|thanks)[\s!.]*$",
-]
-GREETING_RESPONSES = [
-    "Hola, si tienes alguna duda sobre el contenido del Classroom, aquí estoy.",
-    "Hola, cualquier duda sobre las clases o módulos me dices.",
-]
-THANKS_RESPONSES = [
-    "De nada, cualquier otra duda me dices.",
-    "Para eso estamos. Cualquier cosa, aquí ando.",
-]
-
-
-def is_greeting(text: str) -> str | None:
-    """Si es saludo/agradecimiento, retorna respuesta local. Si no, None."""
-    lower = text.lower().strip()
-    # Saludos
-    if re.match(GREETING_PATTERNS[0], lower):
-        return random.choice(GREETING_RESPONSES)
-    # Agradecimientos
-    if re.match(GREETING_PATTERNS[1], lower):
-        return random.choice(THANKS_RESPONSES)
-    return None
 
 
 def is_content_query(text: str) -> bool:
     """Detecta si un mensaje es una consulta sobre contenido del Classroom."""
     lower = text.lower().strip()
 
+    # Ignorar mensajes cortos
     if len(lower) < 12:
         return False
 
+    # Ignorar URLs sueltas
     if lower.startswith("http"):
         return False
 
-    # Ignorar mensajes META
+    # Ignorar mensajes META (sobre el bot, quejas, conversación casual)
     if any(re.search(p, lower) for p in META_PATTERNS):
         return False
 
-    # Contar keywords
+    # Contar keywords por nivel
     strong_count = sum(1 for kw in STRONG_KEYWORDS if re.search(kw, lower))
     weak_count = sum(1 for kw in WEAK_KEYWORDS if re.search(kw, lower))
 
     has_question = any(re.search(p, lower) for p in QUESTION_PATTERNS)
 
-    # Lógica de decisión:
-    # - 1+ keyword fuerte + pregunta → SÍ (alta confianza)
-    # - 2+ keywords débiles + pregunta → SÍ (probablemente busca contenido)
-    # - 1 keyword débil + pregunta → NO (demasiado ambiguo, dejar pasar)
+    # 1+ strong + pregunta → SÍ
+    # 2+ weak + pregunta → SÍ
+    # 1 weak + pregunta → NO (demasiado ambiguo)
     if strong_count >= 1 and has_question:
         return True
     if weak_count >= 2 and has_question:
@@ -235,8 +207,11 @@ allowed_channel_ids = set()
 if ALLOWED_CHANNELS:
     allowed_channel_ids = {int(ch.strip()) for ch in ALLOWED_CHANNELS.split(",") if ch.strip()}
 
+# Cooldown trackers
 user_last_reply = {}
 channel_last_reply = {}
+
+# Debounce tracker: {user_id: asyncio.Task}
 pending_tasks = {}
 
 
@@ -256,6 +231,7 @@ async def process_message(message: discord.Message):
     """Procesa el mensaje después del debounce."""
     await asyncio.sleep(DEBOUNCE_SECONDS)
 
+    # Re-verificar cooldowns (pudieron cambiar durante el debounce)
     now = time.time()
     if now - user_last_reply.get(message.author.id, 0) < USER_COOLDOWN:
         return
@@ -296,7 +272,6 @@ async def on_message(message: discord.Message):
             ref_msg = message.reference.cached_message
             if ref_msg is None:
                 ref_msg = await message.channel.fetch_message(message.reference.message_id)
-            # Solo responder si el reply es AL BOT
             if ref_msg.author.id != client.user.id:
                 return
         except Exception:
@@ -309,15 +284,7 @@ async def on_message(message: discord.Message):
     if now - channel_last_reply.get(message.channel.id, 0) < CHANNEL_COOLDOWN:
         return
 
-    # Saludos/agradecimientos — responder local sin gastar tokens
-    greeting = is_greeting(message.content)
-    if greeting:
-        await message.reply(greeting, mention_author=False)
-        user_last_reply[message.author.id] = now
-        channel_last_reply[message.channel.id] = now
-        return
-
-    # Verificar si es consulta de contenido
+    # Verificar si es consulta de contenido (filtra saludos, gracias, conversación)
     if not is_content_query(message.content):
         return
 
