@@ -5,6 +5,10 @@ Detecta preguntas en Discord y responde con contenido del Classroom.
 
 import os
 import re
+import time
+import asyncio
+import hashlib
+import random
 import discord
 import anthropic
 from pathlib import Path
@@ -14,114 +18,210 @@ DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 MODEL = os.getenv("MODEL", "claude-haiku-4-5-20251001")
 
-# Canales donde el bot responde (dejar vacío = todos los canales)
-# Formato: IDs separados por coma, ej: "123456789,987654321"
 ALLOWED_CHANNELS = os.getenv("ALLOWED_CHANNELS", "")
+USER_COOLDOWN = int(os.getenv("USER_COOLDOWN", "60"))
+CHANNEL_COOLDOWN = int(os.getenv("CHANNEL_COOLDOWN", "30"))
+DEBOUNCE_SECONDS = int(os.getenv("DEBOUNCE_SECONDS", "3"))
 
 # ─── Cargar base de conocimiento ──────────────────────────
 knowledge_path = Path(__file__).parent / "knowledge.txt"
 KNOWLEDGE = knowledge_path.read_text(encoding="utf-8")
 
 # ─── System prompt ────────────────────────────────────────
-SYSTEM_PROMPT = f"""Eres el asistente de contenido de Grupo Powing, una comunidad de agentes de seguros en México y Latinoamérica.
-Tu trabajo es ayudar a los miembros a encontrar clases, módulos y recursos del Classroom en Skool.
+SYSTEM_PROMPT = f"""Eres el asistente de contenido de Grupo Powing (agentes de seguros en LATAM).
+Ayudas a encontrar clases y recursos del Classroom en Skool.
 
-IDENTIDAD Y TONO:
-- Eres un coach amigable pero profesional y directo. No adornas, no rellenas.
-- Hablas en español mexicano. Tuteas siempre (tú, no usted).
-- No usas emojis. Nunca.
-- Máximo 2-3 oraciones por respuesta. Si puedes en 1, mejor.
+TONO: Español mexicano, tuteo, directo, sin emojis. Máximo 2-3 oraciones.
 
-REGLAS DE CONTENIDO:
-1. Responde con el nombre del módulo y una descripción breve de dónde encontrar el contenido.
-2. Siempre incluye el link como hipervínculo de Discord. Formato: [Nombre de la clase](URL). Los links están como "URL:" en la base de conocimiento. NUNCA pegues un URL crudo — siempre usa el formato de hipervínculo.
-3. NO menciones nombres internos de secciones (como "LI — BOT", "LI — Agendamiento", etc.). En su lugar, describe el contenido de forma natural (ej: "en la sección de LinkedIn sobre el BOT").
-4. Si el tema aparece en más de una clase o requiere varios pasos, preséntalos como lista numerada con hipervínculo en cada paso. Ejemplo:
-   1. [Nombre clase 1](URL1)
-   2. [Nombre clase 2](URL2)
-5. Si no encuentras el tema exacto, dilo y sugiere la clase más cercana que sí exista.
-6. NUNCA inventes clases, módulos o URLs que no estén en la base de conocimiento.
-
-FUERA DE TEMA:
-- Si la pregunta no es sobre contenido del Classroom o herramientas del portal, responde brevemente que eso no está en tu base de conocimiento y sugiere el contenido más relacionado que sí tengas.
-
-SALUDOS:
-- Si alguien saluda o agradece, responde con una línea breve y cálida. Sin exagerar.
+REGLAS:
+1. Incluye links como hipervínculo: [Nombre](URL). NUNCA URL crudo.
+2. NO uses nombres internos de secciones (como "LI — BOT"). Describe natural.
+3. Si hay varios videos, lista numerada:
+   1. [Clase 1](URL1)
+   2. [Clase 2](URL2)
+4. Si no encuentras el tema, dilo y sugiere lo más cercano.
+5. NUNCA inventes clases o URLs.
+6. Si el mensaje NO es una pregunta sobre contenido del Classroom, responde SOLO: SKIP
 
 BASE DE CONOCIMIENTO:
 {KNOWLEDGE}"""
 
 # ─── Detección de consultas ───────────────────────────────
 
-# Palabras clave que indican una pregunta sobre contenido
-CONTENT_KEYWORDS = [
-    "clase", "clases", "módulo", "modulo", "módulos", "modulos",
-    "lección", "leccion", "video", "videos", "curso", "cursos",
-    "tema", "temas", "dónde", "donde", "cómo", "como",
-    "classroom", "herramienta", "herramientas", "recurso", "recursos",
-    "crm", "generador", "fathom", "método", "metodo", "3x",
-    "objeciones", "referidos", "guión", "guion", "agendamiento",
-    "agendar", "ventas", "cierre", "presentación", "presentacion",
-    "linkedin", "contenido", "redes", "posts", "prospección",
-    "prospeccion", "cartera", "cita", "reunión", "reunion",
-    "sesión", "sesion", "vivo", "grabación", "grabacion",
-    "calculadora", "ia", "inteligencia artificial",
-    "calendario", "portal", "app",
+# STRONG = palabras que casi siempre indican búsqueda de contenido
+STRONG_KEYWORDS = [
+    r"\bclase\b", r"\bclases\b", r"\bmódulo\b", r"\bmodulo\b",
+    r"\blección\b", r"\bleccion\b", r"\bclassroom\b",
+    r"\bcurso\b", r"\bcursos\b",
+    r"\bfathom\b", r"\b3x\b", r"\bmétodo 3x\b",
+    r"\bsales navigator\b",
+    r"\bgenerador\b", r"\bcalculadora\b",
+    r"\bguión\b", r"\bguion\b",
 ]
 
-# Patrones que indican una pregunta
-QUESTION_PATTERNS = [
-    r"\?",                          # Tiene signo de pregunta
-    r"^(dónde|donde|cómo|como|qué|que|cuál|cual|hay|tienen|existe)",
-    r"(tenés|tenes|tienes) (la |el |una |un )",
-    r"(busco|necesito|quiero ver|quiero aprender)",
-    r"(me (pasás|pasas|das|compartís|compartis))",
-    r"(en qué|en que) (clase|módulo|modulo|video)",
+# WEAK = palabras que PODRÍAN indicar búsqueda, pero también aparecen en conversación normal
+WEAK_KEYWORDS = [
+    r"\bvideo\b", r"\bvideos\b",
+    r"\bherramienta\b", r"\bherramientas\b",
+    r"\bcrm\b", r"\bobjeciones\b", r"\breferidos\b",
+    r"\bagendamiento\b", r"\bagendar\b", r"\bcierre\b",
+    r"\bpresentación\b", r"\bpresentacion\b",
+    r"\blinkedin\b", r"\bposts\b",
+    r"\bprospección\b", r"\bprospeccion\b",
+    r"\bportal\b", r"\bbot\b",
+    r"\binstalo\b", r"\binstalar\b", r"\binstalación\b",
+    r"\binteligencia artificial\b",
+    r"\bwhatsapp empresarial\b",
+    r"\bformulario\b", r"\bagenda\b",
+    r"\bnicho\b", r"\bperfil\b",
 ]
+
+QUESTION_PATTERNS = [
+    r"\?",
+    r"^(dónde|donde|cómo|como|qué|que|cuál|cual)\b.{5,}",
+    r"\b(busco|necesito|quiero ver|quiero aprender)\b",
+    r"\b(me (pasás|pasas|das|compartís|compartis|envías|envias|mandas))\b",
+    r"\b(en qué|en que) (clase|módulo|modulo|video)\b",
+    r"\b(hay (una |alguna )?(clase|lección|video|módulo))\b",
+    r"\b(dónde|donde) (está|esta|encuentro|veo|consigo)\b",
+    r"\b(cómo|como) (instalo|configuro|hago|uso|activo|armo|creo)\b",
+]
+
+# Frases que indican que el mensaje es SOBRE el bot o conversación casual
+META_PATTERNS = [
+    r"asistente de contenido",
+    r"\bbot\b.{0,20}(ruido|molest|spam|error|problema|respond|desconect|crash)",
+    r"(ruido|molest|spam).{0,20}\bbot\b",
+    r"se (borr|elimin|desaparec)",
+    r"me respond(e|ió|en) (en )?automátic",
+    r"está(s)? (generando|haciendo|causando)",
+    r"qué (te |les? )?parece",
+    r"qué (dices|opinan|opinas|crees)",
+    r"\b(pendientes|tareas|sprint|daily|standup)\b",
+    r"\b(hablé|hable|hablamos|platicamos|llam[eé]|contacté)\b",
+    r"\bte (escribo|mando|envío|contacto)\b",
+    r"\bbuenas? (noche|tarde|día|noches|tardes|días)\b.*\bcómo (estás|estas|están|van)\b",
+    r"(qué onda|que onda|qué tal|que tal)$",
+    r"\b(felicidades|felicitaciones|bien hecho|excelente trabajo)\b",
+    r"\b(reunión|reunion|junta|llamada) (de |del |con )(equipo|trabajo|lunes|martes|miércoles|jueves|viernes)\b",
+]
+
+# Saludos simples — se manejan LOCAL sin gastar tokens
+GREETING_PATTERNS = [
+    r"^(hola|hey|buenos días|buenas tardes|buenas noches|buenas|qué onda|buen día)[\s!.]*$",
+    r"^(gracias|muchas gracias|te agradezco|mil gracias|thx|thanks)[\s!.]*$",
+]
+GREETING_RESPONSES = [
+    "Hola, si tienes alguna duda sobre el contenido del Classroom, aquí estoy.",
+    "Hola, cualquier duda sobre las clases o módulos me dices.",
+]
+THANKS_RESPONSES = [
+    "De nada, cualquier otra duda me dices.",
+    "Para eso estamos. Cualquier cosa, aquí ando.",
+]
+
+
+def is_greeting(text: str) -> str | None:
+    """Si es saludo/agradecimiento, retorna respuesta local. Si no, None."""
+    lower = text.lower().strip()
+    # Saludos
+    if re.match(GREETING_PATTERNS[0], lower):
+        return random.choice(GREETING_RESPONSES)
+    # Agradecimientos
+    if re.match(GREETING_PATTERNS[1], lower):
+        return random.choice(THANKS_RESPONSES)
+    return None
 
 
 def is_content_query(text: str) -> bool:
     """Detecta si un mensaje es una consulta sobre contenido del Classroom."""
     lower = text.lower().strip()
 
-    # Ignorar mensajes muy cortos (saludos, reacciones)
-    if len(lower) < 8:
+    if len(lower) < 12:
         return False
 
-    # Ignorar URLs sueltas, solo emojis, o solo archivos
-    if lower.startswith("http") or all(c in "😀😂🤣❤️👍🔥💯✅" for c in lower.replace(" ", "")):
+    if lower.startswith("http"):
         return False
 
-    # Verificar si tiene palabras clave de contenido
-    has_keyword = any(kw in lower for kw in CONTENT_KEYWORDS)
+    # Ignorar mensajes META
+    if any(re.search(p, lower) for p in META_PATTERNS):
+        return False
 
-    # Verificar si parece una pregunta
-    has_question_pattern = any(re.search(p, lower) for p in QUESTION_PATTERNS)
+    # Contar keywords
+    strong_count = sum(1 for kw in STRONG_KEYWORDS if re.search(kw, lower))
+    weak_count = sum(1 for kw in WEAK_KEYWORDS if re.search(kw, lower))
 
-    # Es consulta si: tiene keyword + pregunta, o tiene signo de ? + keyword
-    return has_keyword and has_question_pattern
+    has_question = any(re.search(p, lower) for p in QUESTION_PATTERNS)
+
+    # Lógica de decisión:
+    # - 1+ keyword fuerte + pregunta → SÍ (alta confianza)
+    # - 2+ keywords débiles + pregunta → SÍ (probablemente busca contenido)
+    # - 1 keyword débil + pregunta → NO (demasiado ambiguo, dejar pasar)
+    if strong_count >= 1 and has_question:
+        return True
+    if weak_count >= 2 and has_question:
+        return True
+
+    return False
+
+
+# ─── Cache de respuestas ─────────────────────────────────
+response_cache = {}
+CACHE_TTL = 3600
+
+
+def cache_key(text: str) -> str:
+    normalized = re.sub(r"[^a-záéíóúñü0-9 ]", "", text.lower().strip())
+    normalized = re.sub(r"\s+", " ", normalized)
+    return hashlib.md5(normalized.encode()).hexdigest()
+
+
+def get_cached(text: str) -> str | None:
+    key = cache_key(text)
+    if key in response_cache:
+        answer, ts = response_cache[key]
+        if time.time() - ts < CACHE_TTL:
+            print(f"[CACHE] Hit: {text[:50]}...")
+            return answer
+        else:
+            del response_cache[key]
+    return None
+
+
+def set_cache(text: str, answer: str):
+    response_cache[cache_key(text)] = (answer, time.time())
 
 
 # ─── Cliente de IA ────────────────────────────────────────
 ai = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
 
-def ask_ai(question: str) -> str:
-    """Envía la pregunta a Claude y retorna la respuesta."""
+def ask_ai(question: str) -> str | None:
+    """Envía la pregunta a Claude. Retorna None si falla o no aplica."""
+    cached = get_cached(question)
+    if cached:
+        return cached
+
     try:
         response = ai.messages.create(
             model=MODEL,
-            max_tokens=1024,
+            max_tokens=300,
             system=SYSTEM_PROMPT,
             messages=[{"role": "user", "content": question}],
         )
-        return response.content[0].text
+        answer = response.content[0].text.strip()
+
+        if answer.upper() == "SKIP":
+            return None
+
+        set_cache(question, answer)
+        return answer
     except anthropic.APIError as e:
-        print(f"[ERROR] API de Anthropic: {e}")
-        return "Disculpa, tuve un problema técnico. Intenta de nuevo en unos segundos."
+        print(f"[ERROR] API: {e}")
+        return None
     except Exception as e:
         print(f"[ERROR] Inesperado: {e}")
-        return "Algo salió mal. Intenta de nuevo."
+        return None
 
 
 # ─── Bot de Discord ───────────────────────────────────────
@@ -131,10 +231,13 @@ intents.members = True
 
 client = discord.Client(intents=intents)
 
-# Parse de canales permitidos
 allowed_channel_ids = set()
 if ALLOWED_CHANNELS:
     allowed_channel_ids = {int(ch.strip()) for ch in ALLOWED_CHANNELS.split(",") if ch.strip()}
+
+user_last_reply = {}
+channel_last_reply = {}
+pending_tasks = {}
 
 
 @client.event
@@ -142,37 +245,88 @@ async def on_ready():
     print(f"[BOT] Conectado como {client.user} (ID: {client.user.id})")
     print(f"[BOT] Servidores: {[g.name for g in client.guilds]}")
     if allowed_channel_ids:
-        print(f"[BOT] Canales permitidos: {allowed_channel_ids}")
+        print(f"[BOT] Canales: {allowed_channel_ids}")
     else:
         print("[BOT] Respondiendo en TODOS los canales")
-    print("[BOT] Listo para recibir consultas.")
+    print(f"[BOT] Cooldown usuario: {USER_COOLDOWN}s | canal: {CHANNEL_COOLDOWN}s | debounce: {DEBOUNCE_SECONDS}s")
+    print("[BOT] Listo.")
+
+
+async def process_message(message: discord.Message):
+    """Procesa el mensaje después del debounce."""
+    await asyncio.sleep(DEBOUNCE_SECONDS)
+
+    now = time.time()
+    if now - user_last_reply.get(message.author.id, 0) < USER_COOLDOWN:
+        return
+    if now - channel_last_reply.get(message.channel.id, 0) < CHANNEL_COOLDOWN:
+        return
+
+    async with message.channel.typing():
+        answer = ask_ai(message.content)
+
+    if answer is None:
+        return
+
+    await message.reply(answer, mention_author=False, suppress_embeds=True)
+
+    now = time.time()
+    user_last_reply[message.author.id] = now
+    channel_last_reply[message.channel.id] = now
+    print(f"[QUERY] {message.author}: {message.content[:80]}...")
 
 
 @client.event
 async def on_message(message: discord.Message):
-    # No responder a bots (incluyéndose a sí mismo)
+    # No responder a bots
     if message.author.bot:
         return
 
-    # No responder a admins — si un admin escribe, es porque ya está atendiendo
+    # No responder a admins
     if message.author.guild_permissions.administrator:
         return
 
-    # Verificar si el canal está permitido
+    # Verificar canal permitido
     if allowed_channel_ids and message.channel.id not in allowed_channel_ids:
         return
 
-    # Verificar si es una consulta de contenido
+    # Ignorar replies a otros humanos (es conversación entre ellos)
+    if message.reference and message.reference.message_id:
+        try:
+            ref_msg = message.reference.cached_message
+            if ref_msg is None:
+                ref_msg = await message.channel.fetch_message(message.reference.message_id)
+            # Solo responder si el reply es AL BOT
+            if ref_msg.author.id != client.user.id:
+                return
+        except Exception:
+            return
+
+    # Cooldowns
+    now = time.time()
+    if now - user_last_reply.get(message.author.id, 0) < USER_COOLDOWN:
+        return
+    if now - channel_last_reply.get(message.channel.id, 0) < CHANNEL_COOLDOWN:
+        return
+
+    # Saludos/agradecimientos — responder local sin gastar tokens
+    greeting = is_greeting(message.content)
+    if greeting:
+        await message.reply(greeting, mention_author=False)
+        user_last_reply[message.author.id] = now
+        channel_last_reply[message.channel.id] = now
+        return
+
+    # Verificar si es consulta de contenido
     if not is_content_query(message.content):
         return
 
-    # Indicador de "escribiendo..."
-    async with message.channel.typing():
-        answer = ask_ai(message.content)
+    # Debounce: cancelar tarea anterior del mismo usuario
+    user_id = message.author.id
+    if user_id in pending_tasks:
+        pending_tasks[user_id].cancel()
 
-    # Responder como reply al mensaje original (suppress_embeds evita preview de links)
-    await message.reply(answer, mention_author=False, suppress_embeds=True)
-    print(f"[QUERY] {message.author}: {message.content[:80]}...")
+    pending_tasks[user_id] = asyncio.create_task(process_message(message))
 
 
 # ─── Arrancar ─────────────────────────────────────────────
